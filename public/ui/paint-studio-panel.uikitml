@@ -1,0 +1,37 @@
+<style>
+  .root { width: 92; height: 131; padding-top: 5; padding-right: 5; padding-bottom: 5; padding-left: 5; gap: 3; flex-direction: column; background-color: #efe1c6; border-color: #9c663e; border-width: 1; border-radius: 5; }
+  .eyebrow { color: #72513d; font-size: 2.4; font-weight: 800; text-align: center; }
+  .title { color: #2d2025; font-size: 7; font-weight: 800; text-align: center; }
+  .status { color: #7f4638; font-size: 2.8; font-weight: 700; text-align: center; }
+  .row { flex-direction: row; gap: 2; justify-content: space-between; }
+  .swatch { width: 11; height: 11; border-radius: 5.5; cursor: pointer; }
+  .red { background-color: #d83b3b; } .yellow { background-color: #edb83d; } .blue { background-color: #316fca; }
+  .white { background-color: #f4efe4; border-color: #9f917e; border-width: 0.5; } .black { background-color: #18161b; } .green { background-color: #4c9a62; }
+  .tool { width: 25; height: 11; background-color: #483941; color: #fff7e8; font-size: 3; font-weight: 800; border-radius: 2; cursor: pointer; }
+  .profile { width: 25; height: 10; background-color: #795444; color: #fff7e8; font-size: 2.7; font-weight: 800; border-radius: 2; cursor: pointer; }
+  .mix { width: 80; height: 12; background-color: #c58a53; color: #231a20; font-size: 3; font-weight: 800; border-radius: 2; cursor: pointer; }
+  .action { width: 25; height: 12; background-color: #ded0b7; color: #2d2025; font-size: 3; font-weight: 800; border-radius: 2; cursor: pointer; }
+  .save { background-color: #496b52; color: #fff7e8; }
+  .readout { width: 80; padding-top: 2; padding-bottom: 2; padding-left: 3; padding-right: 3; background-color: #2d252e; border-radius: 2; flex-direction: row; justify-content: space-between; }
+  .readoutText { color: #fff7e8; font-size: 2.6; font-weight: 700; }
+  .hint { color: #5f4b42; font-size: 2.5; text-align: center; }
+</style>
+<Panel class="root">
+  <span class="eyebrow">IMMERSIVE OIL STUDIO</span>
+  <span class="title">PAINT PALETTE</span>
+  <span id="StatusText" class="status">BLANK CANVAS READY</span>
+  <div class="row">
+    <button id="ColorRed" class="swatch red"></button><button id="ColorYellow" class="swatch yellow"></button><button id="ColorBlue" class="swatch blue"></button>
+    <button id="ColorWhite" class="swatch white"></button><button id="ColorBlack" class="swatch black"></button><button id="ColorGreen" class="swatch green"></button>
+  </div>
+  <div class="row"><button id="Btn_Small" class="tool">FINE</button><button id="Btn_Medium" class="tool">MEDIUM</button><button id="Btn_Large" class="tool">BROAD</button></div>
+  <div class="row"><button id="Btn_Flat" class="profile">FLAT</button><button id="Btn_Filbert" class="profile">FILBERT</button><button id="Btn_Fan" class="profile">FAN</button></div>
+  <button id="Btn_Blend" class="mix">CYCLE CANVAS BLENDING</button>
+  <span id="BlendText" class="status">BLENDING 78%</span>
+  <button id="Btn_Mix" class="mix">MIX CURRENT + PREVIOUS</button>
+  <div class="row"><button id="Btn_Undo" class="action">UNDO</button><button id="Btn_Clear" class="action">NEW</button><button id="Btn_Save" class="action save">SAVE</button></div>
+  <div class="readout"><span id="ColorText" class="readoutText">CRIMSON</span><span id="BrushText" class="readoutText">MEDIUM</span></div>
+  <div class="readout"><span id="ShapeText" class="readoutText">FLAT BRUSH</span><span id="LoadText" class="readoutText">LOAD 100%</span></div>
+  <span id="HistoryText" class="hint">0 STROKES / 0 UNDO</span>
+  <span class="hint">Pinch the brush, then touch its bristles to the canvas. Reload paint from any colour.</span>
+</Panel>

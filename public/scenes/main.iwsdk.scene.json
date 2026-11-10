@@ -3,215 +3,94 @@
   "units": "meters",
   "components": {
     "com.iwsdk.components.DomeGradient": {
-      "sky": [0.075, 0.045, 0.14, 1],
-      "equator": [0.17, 0.1, 0.24, 1],
-      "ground": [0.025, 0.018, 0.05, 1],
-      "elevationDeg": 12,
-      "azimuthDeg": -30,
+      "sky": [0.24, 0.48, 0.76, 1],
+      "equator": [0.72, 0.82, 0.88, 1],
+      "ground": [0.16, 0.31, 0.38, 1],
+      "elevationDeg": 24,
+      "azimuthDeg": -42,
       "dither": true
     },
     "com.iwsdk.components.IBLGradient": {
-      "sky": [0.34, 0.25, 0.5, 1],
-      "equator": [0.7, 0.48, 0.32, 1],
-      "ground": [0.07, 0.05, 0.1, 1],
-      "intensity": 1.05
+      "sky": [0.72, 0.84, 0.98, 1],
+      "equator": [0.84, 0.88, 0.82, 1],
+      "ground": [0.22, 0.34, 0.31, 1],
+      "intensity": 1.12
     }
   },
-  "environment": { "toneMapping": "aces", "exposure": 1.2, "shadows": false },
+  "environment": { "toneMapping": "aces", "exposure": 1.08, "shadows": true },
   "resources": {},
+  "player": {
+    "transform": {
+      "position": [0, 0, 0.18],
+      "rotationDeg": [0, 0, 0]
+    }
+  },
   "authoring": {
-    "views": [{
-      "id": "hero",
-      "role": "hero",
-      "projection": "perspective",
-      "position": [0.78, 1.62, 0.42],
-      "target": [0, 1.09, -0.55],
-      "fov": 48
-    }]
+    "views": [
+      {
+        "id": "hero", "role": "hero", "projection": "perspective",
+        "position": [1.92, 1.72, 0.34], "target": [0, 1.08, -1.3], "fov": 48
+      },
+      {
+        "id": "spawn", "role": "diagnostic", "projection": "perspective",
+        "position": [0, 1.55, 0.18], "target": [0, 1.15, -1.28], "fov": 52
+      }
+    ]
   },
   "nodes": [
     {
-      "id": "toy-table",
-      "name": "Heart Guard Toy Table",
-      "framingRole": "support",
-      "content": { "type": "asset", "asset": "toy-table" },
-      "transform": { "position": [0, 1.02, -0.55] }
+      "id": "alpine-painting-deck", "name": "Walkable Alpine Painting Deck", "framingRole": "support",
+      "content": { "type": "asset", "asset": "alpine-painting-deck", "castShadow": true, "receiveShadow": true },
+      "transform": { "position": [0, 0, 0] },
+      "components": { "LocomotionEnvironment": {} }
     },
     {
-      "id": "plush-heart",
-      "name": "Plush Heart",
-      "content": { "type": "asset", "asset": "plush-heart" },
-      "transform": { "position": [0, 1.035, -0.55], "rotationDeg": [0, 0, 0] },
-      "components": { "com.iwsdk.components.ContactShadow": { "size": [0.34, 0.25] } }
-    },
-    {
-      "id": "toy-barricade",
-      "name": "Toy Block Barricade",
-      "content": { "type": "asset", "asset": "toy-barricade" },
-      "transform": { "position": [0, 1.04, -0.55] }
-    },
-    {
-      "id": "toy-bomb",
-      "name": "Toy Bomb",
-      "content": { "type": "asset", "asset": "toy-bomb" },
-      "transform": { "position": [0.23, 1.04, -0.38] }
-    },
-    {
-      "id": "heart-guard-session",
-      "name": "Heart Guard Session",
+      "id": "studio-easel", "name": "Interactive Painting Easel",
+      "content": { "type": "asset", "asset": "studio-easel", "castShadow": true, "receiveShadow": true },
+      "transform": { "position": [0, 0, -1.28] },
       "components": {
-        "HeartGuardSession": {
-          "phase": 0,
-          "heartHealth": 10,
-          "energy": 0,
-          "score": 0,
-          "kills": 0,
-          "wave": 1,
-          "waveTime": 40,
-          "timeScale": 0.15,
-          "calibratedDeadZone": 0.06,
-          "calibrationTime": 3,
-          "selectedAbility": 0,
-          "barricadeRemaining": 0,
-          "barricadeCooldown": 0
-        }
+        "com.iwsdk.components.ContactShadow": { "size": [0.95, 0.55] },
+        "LocomotionEnvironment": {}
       }
     },
     {
-      "id": "heart-guard-panel",
-      "name": "Heart Guard Hand Panel",
-      "content": { "type": "asset", "asset": "heart-guard-panel" },
-      "transform": { "position": [-0.35, 1.35, -0.43], "rotationDeg": [0, 12, 0], "scale": [0.36, 0.36, 0.36] },
+      "id": "painter-cart", "name": "Palette and Brush Cart",
+      "content": { "type": "asset", "asset": "painter-cart", "castShadow": true, "receiveShadow": true },
+      "transform": { "position": [0.86, 0, -0.82], "rotationDeg": [0, -12, 0], "scale": [0.9, 0.9, 0.9] },
+      "components": {
+        "com.iwsdk.components.ContactShadow": { "size": [0.65, 0.45] },
+        "LocomotionEnvironment": {}
+      }
+    },
+    {
+      "id": "artist-brush", "name": "Loaded Artist Brush",
+      "content": { "type": "asset", "asset": "artist-brush", "castShadow": true },
+      "transform": { "position": [1.01, 1.1, -0.72], "rotationDeg": [90, 0, -8] },
+      "components": { "OneHandGrabbable": {} }
+    },
+    {
+      "id": "paint-studio-panel", "name": "Paint Palette Spatial Controls",
+      "content": { "type": "asset", "asset": "paint-studio-panel" },
+      "transform": { "position": [-0.78, 1.32, -0.76], "rotationDeg": [0, 8, 0], "scale": [0.43, 0.43, 0.43] },
       "components": { "PokeInteractable": {}, "RayInteractable": {} }
     },
     {
-      "id": "bunny-1", "name": "Dust Bunny 1",
-      "content": { "type": "asset", "asset": "dust-bunny" },
-      "transform": { "position": [-0.27, 1.045, -0.77] },
-      "components": {
-        "Invader": { "kind": 0, "health": 1, "maxHealth": 1, "speed": 0.052, "active": false, "spawnIndex": 0, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.13, 0.13] }
-      }
+      "id": "paint-studio-state", "name": "Paint Studio State",
+      "components": { "PaintStudioState": { "selectedColor": 0, "brushSize": 2, "brushShape": 0, "paintLoad": 100, "wetness": 78, "paletteMixCount": 0, "paletteContact": false, "strokeCount": 0, "undoCount": 0, "mode": 0, "hasReference": false, "savedCount": 0 } }
     },
     {
-      "id": "bunny-2", "name": "Dust Bunny 2",
-      "content": { "type": "asset", "asset": "dust-bunny" },
-      "transform": { "position": [-0.16, 1.045, -0.86] },
-      "components": {
-        "Invader": { "kind": 0, "health": 1, "maxHealth": 1, "speed": 0.055, "active": false, "spawnIndex": 1, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.13, 0.13] }
-      }
+      "id": "studio-key", "name": "Alpine Sun Key",
+      "transform": { "position": [-4.6, 7.4, 3.2], "rotationDeg": [-51, -28, 0] },
+      "components": { "com.iwsdk.components.DirectionalLight": { "color": [1, 0.92, 0.78, 1], "intensity": 2.25, "castShadow": true } }
     },
     {
-      "id": "bunny-3", "name": "Dust Bunny 3",
-      "content": { "type": "asset", "asset": "dust-bunny" },
-      "transform": { "position": [-0.05, 1.045, -0.9] },
-      "components": {
-        "Invader": { "kind": 0, "health": 1, "maxHealth": 1, "speed": 0.058, "active": false, "spawnIndex": 2, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.13, 0.13] }
-      }
+      "id": "studio-fill", "name": "Open Sky Fill",
+      "components": { "com.iwsdk.components.HemisphereLight": { "skyColor": [0.62, 0.78, 1, 1], "groundColor": [0.28, 0.34, 0.25, 1], "intensity": 0.84 } }
     },
     {
-      "id": "bunny-4", "name": "Dust Bunny 4",
-      "content": { "type": "asset", "asset": "dust-bunny" },
-      "transform": { "position": [0.08, 1.045, -0.9] },
-      "components": {
-        "Invader": { "kind": 0, "health": 1, "maxHealth": 1, "speed": 0.054, "active": false, "spawnIndex": 3, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.13, 0.13] }
-      }
-    },
-    {
-      "id": "bunny-5", "name": "Dust Bunny 5",
-      "content": { "type": "asset", "asset": "dust-bunny" },
-      "transform": { "position": [0.2, 1.045, -0.84] },
-      "components": {
-        "Invader": { "kind": 0, "health": 1, "maxHealth": 1, "speed": 0.057, "active": false, "spawnIndex": 4, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.13, 0.13] }
-      }
-    },
-    {
-      "id": "bunny-6", "name": "Dust Bunny 6",
-      "content": { "type": "asset", "asset": "dust-bunny" },
-      "transform": { "position": [0.29, 1.045, -0.74] },
-      "components": {
-        "Invader": { "kind": 0, "health": 1, "maxHealth": 1, "speed": 0.053, "active": false, "spawnIndex": 5, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.13, 0.13] }
-      }
-    },
-    {
-      "id": "bunny-7", "name": "Dust Bunny 7",
-      "content": { "type": "asset", "asset": "dust-bunny" },
-      "transform": { "position": [-0.31, 1.045, -0.66] },
-      "components": {
-        "Invader": { "kind": 0, "health": 1, "maxHealth": 1, "speed": 0.056, "active": false, "spawnIndex": 6, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.13, 0.13] }
-      }
-    },
-    {
-      "id": "brute-1", "name": "Boot Brute 1",
-      "content": { "type": "asset", "asset": "boot-brute" },
-      "transform": { "position": [-0.25, 1.04, -0.72] },
-      "components": {
-        "Invader": { "kind": 1, "health": 3, "maxHealth": 3, "speed": 0.031, "active": false, "spawnIndex": 7, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.16, 0.15] }
-      }
-    },
-    {
-      "id": "brute-2", "name": "Boot Brute 2",
-      "content": { "type": "asset", "asset": "boot-brute" },
-      "transform": { "position": [0.25, 1.04, -0.72] },
-      "components": {
-        "Invader": { "kind": 1, "health": 3, "maxHealth": 3, "speed": 0.029, "active": false, "spawnIndex": 8, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.16, 0.15] }
-      }
-    },
-    {
-      "id": "brute-3", "name": "Boot Brute 3",
-      "content": { "type": "asset", "asset": "boot-brute" },
-      "transform": { "position": [0, 1.04, -0.89] },
-      "components": {
-        "Invader": { "kind": 1, "health": 3, "maxHealth": 3, "speed": 0.03, "active": false, "spawnIndex": 9, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {},
-        "com.iwsdk.components.ContactShadow": { "size": [0.16, 0.15] }
-      }
-    },
-    {
-      "id": "plane-1", "name": "Paper Plane 1",
-      "content": { "type": "asset", "asset": "paper-plane" },
-      "transform": { "position": [-0.2, 1.25, -0.82] },
-      "components": {
-        "Invader": { "kind": 2, "health": 1, "maxHealth": 1, "speed": 0.047, "active": false, "spawnIndex": 10, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {}
-      }
-    },
-    {
-      "id": "plane-2", "name": "Paper Plane 2",
-      "content": { "type": "asset", "asset": "paper-plane" },
-      "transform": { "position": [0.2, 1.27, -0.82] },
-      "components": {
-        "Invader": { "kind": 2, "health": 1, "maxHealth": 1, "speed": 0.045, "active": false, "spawnIndex": 11, "progress": 0, "hitCooldown": 0 },
-        "PokeInteractable": {}, "RayInteractable": {}
-      }
-    },
-    {
-      "id": "warm-lamp",
-      "name": "Warm Toy Lamp",
-      "transform": { "position": [0.42, 1.55, -0.3] },
-      "components": { "com.iwsdk.components.PointLight": { "color": [1, 0.63, 0.3, 1], "intensity": 7, "distance": 2.2, "decay": 2, "castShadow": false } }
-    },
-    {
-      "id": "violet-fill",
-      "name": "Violet Room Fill",
-      "components": { "com.iwsdk.components.HemisphereLight": { "skyColor": [0.35, 0.3, 0.6, 1], "groundColor": [0.12, 0.08, 0.16, 1], "intensity": 1.1 } }
+      "id": "canvas-rim", "name": "Canvas Surface Rim",
+      "transform": { "position": [0.7, 1.82, -0.26] },
+      "components": { "com.iwsdk.components.PointLight": { "color": [1, 0.8, 0.58, 1], "intensity": 1.25, "distance": 2.8, "decay": 2, "castShadow": false } }
     }
   ]
 }

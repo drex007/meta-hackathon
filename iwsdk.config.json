@@ -20,25 +20,34 @@
       "canvasPointerEvents": true
     },
     "render": {
-      "fov": 70,
-      "near": 0.001,
-      "far": 200,
+      "fov": 52,
+      "near": 0.01,
+      "far": 50,
       "camera": {
         "position": [
           0,
           1.55,
-          2.4
+          0.18
         ],
         "lookAt": [
           0,
-          1.45,
-          -4
+          1.15,
+          -1.28
         ]
       }
     },
     "features": {
-      "locomotion": false,
-      "grabbing": false,
+      "locomotion": {
+        "useWorker": true,
+        "comfortAssistLevel": 0.65,
+        "turningMethod": "snap",
+        "enableJumping": false,
+        "browserControls": {
+          "keyboard": true,
+          "gamepad": true
+        }
+      },
+      "grabbing": true,
       "physics": false,
       "sceneUnderstanding": false,
       "environmentRaycast": false,

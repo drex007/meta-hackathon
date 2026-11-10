@@ -1,26 +1,21 @@
 import { AssetType, defineAssets } from '@iwsdk/core';
 import {
-  createBootBrute,
-  createDustBunny,
-  createHeartHealthToken,
-  createPaperPlane,
-  createPlushHeart,
-  createToyBarricade,
-  createToyBomb,
-  createToyTable,
-} from './scene-assets/heart-guard.scene-asset.js';
+  createArtistBrush,
+  createPainterCart,
+  createStudioEasel,
+  createStudioRoom,
+} from './scene-assets/paint-studio.scene-asset.js';
+import { createAlpinePaintingDeck, createAlpineVista } from './scene-assets/alpine-studio.scene-asset.js';
 
 export default defineAssets({
-  'heart-guard-panel': {
+  'paint-studio-panel': {
     type: AssetType.UIKitML,
-    url: `${import.meta.env.BASE_URL}ui/heart-guard-panel.uikitml`,
+    url: `${import.meta.env.BASE_URL}ui/paint-studio-panel.uikitml`,
   },
-  'plush-heart': createPlushHeart(),
-  'toy-table': createToyTable(),
-  'dust-bunny': createDustBunny(),
-  'boot-brute': createBootBrute(),
-  'paper-plane': createPaperPlane(),
-  'toy-barricade': createToyBarricade(),
-  'toy-bomb': createToyBomb(),
-  'health-token': createHeartHealthToken(),
+  'studio-easel': createStudioEasel(),
+  'artist-brush': createArtistBrush(),
+  'painter-cart': createPainterCart(),
+  'studio-room': createStudioRoom(),
+  'alpine-painting-deck': createAlpinePaintingDeck(),
+  'alpine-vista': createAlpineVista(),
 });

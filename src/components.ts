@@ -1,14 +1,7 @@
 import { defineComponents } from '@iwsdk/core';
-import {
-  AbilityButton,
-  GameControl,
-  HeartGuardSession,
-  Invader,
-} from './game/heart-guard-components.js';
+import { PaintAction, PaintStudioState } from './paint/paint-components.js';
 
 export default defineComponents([
-  HeartGuardSession,
-  Invader,
-  AbilityButton,
-  GameControl,
+  PaintStudioState,
+  PaintAction,
 ]);
