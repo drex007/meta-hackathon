@@ -1,7 +1,9 @@
 import { AssetType, defineAssets } from '@iwsdk/core';
 import {
-  createArtistBrush,
+  createFanArtistBrush,
+  createFlatArtistBrush,
   createPainterCart,
+  createRoundArtistBrush,
   createStudioEasel,
   createStudioRoom,
 } from './scene-assets/paint-studio.scene-asset.js';
@@ -13,7 +15,9 @@ export default defineAssets({
     url: `${import.meta.env.BASE_URL}ui/paint-studio-panel.uikitml`,
   },
   'studio-easel': createStudioEasel(),
-  'artist-brush': createArtistBrush(),
+  'artist-brush-round': createRoundArtistBrush(),
+  'artist-brush-flat': createFlatArtistBrush(),
+  'artist-brush-fan': createFanArtistBrush(),
   'painter-cart': createPainterCart(),
   'studio-room': createStudioRoom(),
   'alpine-painting-deck': createAlpinePaintingDeck(),

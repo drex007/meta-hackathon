@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mixHexColors, mixPigmentColors, quantizeLuminance } from './paint-core.js';
+import { mixHexColors, mixPigmentColors } from './paint-core.js';
 
 describe('paint colour tools', () => {
   it('mixes RGB channels evenly', () => {
@@ -14,11 +14,5 @@ describe('paint colour tools', () => {
     const blue = Number.parseInt(green.slice(5, 7), 16);
     expect(greenChannel).toBeGreaterThan(red);
     expect(greenChannel).toBeGreaterThan(blue);
-  });
-
-  it('maps image pixels into six monochrome paint-number tones', () => {
-    expect(quantizeLuminance(0, 0, 0)).toBe(0);
-    expect(quantizeLuminance(255, 255, 255)).toBe(5);
-    expect(quantizeLuminance(0, 255, 0)).toBeGreaterThan(quantizeLuminance(255, 0, 0));
   });
 });

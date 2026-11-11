@@ -150,36 +150,73 @@ export function createStudioEasel(): Group {
   return root;
 }
 
-export function createArtistBrush(): Group {
+type ArtistBrushProfile = 'round' | 'flat' | 'fan';
+
+export function createArtistBrush(profile: ArtistBrushProfile): Group {
   const root = new Group();
-  root.name = 'ArtistBrush';
+  root.name = `${profile[0].toUpperCase()}${profile.slice(1)}ArtistBrush`;
 
   const handle = namedMesh('GripHandle', new CylinderGeometry(0.009, 0.014, 0.25, 18), materials.lacquer);
   handle.position.y = 0.045;
   const collar = namedMesh('FerruleCollar', new CylinderGeometry(0.017, 0.014, 0.025, 16), materials.steel);
   collar.position.y = -0.089;
-  const ferrule = namedMesh('Ferrule', bevelBox(0.05, 0.065, 0.016, 0.004), materials.steel);
+  const ferrule = profile === 'round'
+    ? namedMesh('Ferrule', new CylinderGeometry(0.015, 0.017, 0.07, 16), materials.steel)
+    : namedMesh('Ferrule', bevelBox(profile === 'fan' ? 0.062 : 0.05, 0.065, 0.016, 0.004), materials.steel);
   ferrule.position.y = -0.132;
   root.add(handle, collar, ferrule);
 
   const bristleGroup = new Group();
   bristleGroup.name = 'BristleBundle';
-  for (let index = 0; index < 11; index += 1) {
-    const across = index / 10 - 0.5;
-    const length = 0.078 - Math.abs(across) * 0.012;
-    const bristle = namedMesh(`Bristle-${index + 1}`, new BoxGeometry(0.004, length, 0.011), materials.bristle);
-    bristle.position.set(across * 0.043, -0.165 - length * 0.5, 0);
-    bristle.rotation.z = -across * 0.045;
-    bristleGroup.add(bristle);
+  if (profile === 'round') {
+    for (let index = 0; index < 9; index += 1) {
+      const angle = ((index - 1) / 8) * Math.PI * 2;
+      const radius = index === 0 ? 0 : 0.0065;
+      const length = index === 0 ? 0.085 : 0.079 - (index % 2) * 0.003;
+      const bristle = namedMesh(
+        `Bristle-${index + 1}`,
+        new CylinderGeometry(0.0024, 0.0035, length, 7),
+        materials.bristle,
+      );
+      bristle.position.set(Math.cos(angle) * radius, -0.165 - length * 0.5, Math.sin(angle) * radius);
+      bristleGroup.add(bristle);
+    }
+  } else if (profile === 'flat') {
+    for (let index = 0; index < 11; index += 1) {
+      const across = index / 10 - 0.5;
+      const length = 0.078 - Math.abs(across) * 0.012;
+      const bristle = namedMesh(`Bristle-${index + 1}`, new BoxGeometry(0.004, length, 0.011), materials.bristle);
+      bristle.position.set(across * 0.043, -0.165 - length * 0.5, 0);
+      bristle.rotation.z = -across * 0.045;
+      bristleGroup.add(bristle);
+    }
+  } else {
+    for (let index = 0; index < 15; index += 1) {
+      const across = index / 14 - 0.5;
+      const spread = across * 1.12;
+      const length = 0.095 - Math.abs(across) * 0.022;
+      const bristle = namedMesh(`Bristle-${index + 1}`, new BoxGeometry(0.0035, length, 0.008), materials.bristle);
+      bristle.position.set(
+        Math.sin(spread) * length * 0.5,
+        -0.165 - Math.cos(spread) * length * 0.5,
+        (index % 3 - 1) * 0.0015,
+      );
+      bristle.rotation.z = spread;
+      bristleGroup.add(bristle);
+    }
   }
   root.add(bristleGroup);
 
   const tipMarker = namedMesh('BrushTip', new SphereGeometry(0.004, 8, 5), materials.bristle);
-  tipMarker.position.y = -0.244;
+  tipMarker.position.y = profile === 'fan' ? -0.26 : profile === 'round' ? -0.25 : -0.244;
   tipMarker.visible = false;
   root.add(tipMarker);
   return root;
 }
+
+export const createRoundArtistBrush = (): Group => createArtistBrush('round');
+export const createFlatArtistBrush = (): Group => createArtistBrush('flat');
+export const createFanArtistBrush = (): Group => createArtistBrush('fan');
 
 export function createPainterCart(): Group {
   const root = new Group();
@@ -210,15 +247,9 @@ export function createPainterCart(): Group {
   paletteRim.position.set(-0.06, 0.813, 0.01);
   root.add(mixSurface, paletteRim);
 
-  const cup = namedMesh('BrushCup', new CylinderGeometry(0.07, 0.055, 0.18, 14, 1, true), materials.terracotta);
-  cup.position.set(0.25, 0.87, -0.08);
+  const cup = namedMesh('BrushCup', new CylinderGeometry(0.13, 0.105, 0.22, 18, 1, true), materials.terracotta);
+  cup.position.set(0.25, 0.89, -0.08);
   root.add(cup);
-  for (let index = 0; index < 5; index += 1) {
-    const brush = namedMesh(`Brush-${index + 1}`, new CylinderGeometry(0.007, 0.009, 0.34 + index * 0.02, 8), index % 2 ? materials.brass : materials.walnut);
-    brush.position.set(0.22 + index * 0.014, 1.02 + index * 0.01, -0.08);
-    brush.rotation.z = -0.1 + index * 0.05;
-    root.add(brush);
-  }
   const rag = namedMesh('LinenRag', new PlaneGeometry(0.25, 0.18, 4, 3), materials.cloth);
   rag.rotation.set(-Math.PI / 2, 0, -0.18);
   rag.position.set(-0.18, 0.806, -0.11);

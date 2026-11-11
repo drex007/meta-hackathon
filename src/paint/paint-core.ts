@@ -64,8 +64,3 @@ function rybToRgb(input: Channels): Channels {
   }
   return { r: Math.min(1, r + white), g: Math.min(1, g + white), b: Math.min(1, b + white) };
 }
-
-export function quantizeLuminance(red: number, green: number, blue: number, levels = 6): number {
-  const luminance = red * 0.2126 + green * 0.7152 + blue * 0.0722;
-  return Math.max(0, Math.min(levels - 1, Math.round((luminance / 255) * (levels - 1))));
-}

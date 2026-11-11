@@ -63,10 +63,22 @@
       }
     },
     {
-      "id": "artist-brush", "name": "Loaded Artist Brush",
-      "content": { "type": "asset", "asset": "artist-brush", "castShadow": true },
-      "transform": { "position": [1.01, 1.1, -0.72], "rotationDeg": [90, 0, -8] },
-      "components": { "OneHandGrabbable": {} }
+      "id": "artist-brush-round", "name": "Round Painting Brush",
+      "content": { "type": "asset", "asset": "artist-brush-round", "castShadow": true },
+      "transform": { "position": [1.05, 1.14, -0.81], "rotationDeg": [0, 0, 180] },
+      "components": { "PaintBrush": { "shape": 0 }, "OneHandGrabbable": {}, "RayInteractable": {} }
+    },
+    {
+      "id": "artist-brush-flat", "name": "Flat Painting Brush",
+      "content": { "type": "asset", "asset": "artist-brush-flat", "castShadow": true },
+      "transform": { "position": [1.12, 1.14, -0.85], "rotationDeg": [0, 0, 180] },
+      "components": { "PaintBrush": { "shape": 1 }, "OneHandGrabbable": {}, "RayInteractable": {} }
+    },
+    {
+      "id": "artist-brush-fan", "name": "Fan Painting Brush",
+      "content": { "type": "asset", "asset": "artist-brush-fan", "castShadow": true },
+      "transform": { "position": [1.19, 1.14, -0.89], "rotationDeg": [0, 0, 180] },
+      "components": { "PaintBrush": { "shape": 2 }, "OneHandGrabbable": {}, "RayInteractable": {} }
     },
     {
       "id": "paint-studio-panel", "name": "Paint Palette Spatial Controls",

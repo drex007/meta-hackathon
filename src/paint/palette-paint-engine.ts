@@ -19,12 +19,14 @@ export class PalettePaintEngine {
   private readonly context: CanvasRenderingContext2D;
   private readonly heightContext: CanvasRenderingContext2D;
   private readonly engine: OilPaintEngine;
+  private readonly onChange: () => void;
   private readonly deposited = new Uint8Array(PAINT_COLORS.length);
   private active = false;
   private currentRegion = -1;
   private centerColor = '';
 
   constructor(onChange: () => void) {
+    this.onChange = onChange;
     this.canvas = document.createElement('canvas');
     this.canvas.width = 512;
     this.canvas.height = 512;
@@ -35,6 +37,33 @@ export class PalettePaintEngine {
     this.heightContext = this.heightCanvas.getContext('2d') as CanvasRenderingContext2D;
     this.paintWoodSurface();
     this.engine = new OilPaintEngine(this.canvas, this.heightCanvas, onChange);
+  }
+
+  resetMixingArea(): void {
+    this.engine.end();
+    this.centerColor = '';
+    this.context.save();
+    this.context.fillStyle = '#c69a6d';
+    this.context.beginPath();
+    this.context.arc(MIX_X, MIX_Y, MIX_RADIUS + 2, 0, Math.PI * 2);
+    this.context.fill();
+    this.context.strokeStyle = 'rgba(73,39,22,.12)';
+    this.context.lineWidth = 2;
+    for (let y = MIX_Y - MIX_RADIUS; y <= MIX_Y + MIX_RADIUS; y += 14) {
+      const halfChord = Math.sqrt(Math.max(0, MIX_RADIUS * MIX_RADIUS - (y - MIX_Y) * (y - MIX_Y)));
+      this.context.beginPath();
+      this.context.moveTo(MIX_X - halfChord, y);
+      this.context.lineTo(MIX_X + halfChord, y + Math.sin(y * 0.08) * 3);
+      this.context.stroke();
+    }
+    this.context.restore();
+    this.heightContext.save();
+    this.heightContext.fillStyle = '#080808';
+    this.heightContext.beginPath();
+    this.heightContext.arc(MIX_X, MIX_Y, MIX_RADIUS + 2, 0, Math.PI * 2);
+    this.heightContext.fill();
+    this.heightContext.restore();
+    this.onChange();
   }
 
   deposit(index: number, color: string): void {

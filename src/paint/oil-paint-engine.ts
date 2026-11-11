@@ -13,6 +13,10 @@ export class OilPaintEngine {
   private wetness = 1;
   private paintLoad = 100;
   private paint = '#d83b3b';
+  private stabilization = 0;
+  private dryBrush = false;
+  private smoothedX = 0;
+  private smoothedY = 0;
 
   constructor(colorCanvas: HTMLCanvasElement, heightCanvas: HTMLCanvasElement, onChange: () => void) {
     this.color = colorCanvas.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
@@ -21,23 +25,41 @@ export class OilPaintEngine {
     this.resetHeight();
   }
 
-  begin(x: number, y: number, pressure: number, paint: string, brushSize: number, brushShape: BrushShape, wetness: number, paintLoad: number): number {
+  begin(
+    x: number,
+    y: number,
+    pressure: number,
+    paint: string,
+    brushSize: number,
+    brushShape: BrushShape,
+    wetness: number,
+    paintLoad: number,
+    stabilization = 0,
+    dryBrush = false,
+  ): number {
     this.active = true;
     this.lastX = x;
     this.lastY = y;
+    this.smoothedX = x;
+    this.smoothedY = y;
     this.pressure = this.normalizePressure(pressure);
     this.paint = paint;
     this.brushSize = brushSize;
     this.brushShape = brushShape;
     this.wetness = Math.max(0, Math.min(1, wetness / 100));
     this.paintLoad = paintLoad;
+    this.stabilization = Math.max(0, Math.min(1, stabilization / 100));
+    this.dryBrush = dryBrush;
     this.renderSegment(x + 0.35, y + 0.35, this.pressure);
     return this.paintLoad;
   }
 
   continue(x: number, y: number, pressure: number): number {
     if (!this.active) return this.paintLoad;
-    this.renderSegment(x, y, this.normalizePressure(pressure));
+    const response = 1 - this.stabilization * 0.82;
+    this.smoothedX += (x - this.smoothedX) * response;
+    this.smoothedY += (y - this.smoothedY) * response;
+    this.renderSegment(this.smoothedX, this.smoothedY, this.normalizePressure(pressure));
     return this.paintLoad;
   }
 
@@ -66,8 +88,10 @@ export class OilPaintEngine {
     const ny = dx / distance;
     const load = Math.max(0.05, this.paintLoad / 100);
     const contactWidth = this.brushSize * (0.52 + pressure * 0.92);
-    const deposit = (0.22 + this.wetness * 0.2) * load;
+    const deposit = (0.22 + this.wetness * 0.2) * load * (this.dryBrush ? 0.28 : 1);
     const relief = (0.92 - pressure * 0.58) * load;
+
+    if (this.dryBrush) this.smearNearbyPaint(dx, dy, contactWidth, pressure);
 
     this.strokeLine(this.color, this.lastX + nx, this.lastY + ny, x + nx, y + ny, contactWidth + 2, '#23120d', 0.09 * load);
     this.strokeLine(this.color, this.lastX, this.lastY, x, y, contactWidth, this.paint, deposit);
@@ -81,7 +105,8 @@ export class OilPaintEngine {
       const fanSpread = this.brushShape === 2 ? 1.28 : 1;
       const offset = normalized * contactWidth * fanSpread;
       const jitter = Math.sin(index * 19.71 + this.lastX * 0.017 + this.lastY * 0.011) * 0.62;
-      const bristleOpacity = (0.2 + (index % 4) * 0.045) * load * (0.55 + shapeWidth * 0.45);
+      const dryGap = this.dryBrush && (index + Math.floor(this.lastX * 0.1 + this.lastY * 0.07)) % 3 === 0 ? 0.08 : 1;
+      const bristleOpacity = (0.2 + (index % 4) * 0.045) * load * (0.55 + shapeWidth * 0.45) * dryGap;
       const bristleWidth = Math.max(0.65, contactWidth / bristles * (this.brushShape === 2 ? 0.38 : 0.64));
       this.strokeLine(
         this.color,
@@ -134,5 +159,28 @@ export class OilPaintEngine {
 
   private normalizePressure(pressure: number): number {
     return pressure > 0 ? Math.max(0.08, Math.min(1, pressure)) : 0.5;
+  }
+
+  private smearNearbyPaint(dx: number, dy: number, width: number, pressure: number): void {
+    const radius = Math.max(3, width * 0.72);
+    const sourceX = Math.max(0, this.lastX - radius);
+    const sourceY = Math.max(0, this.lastY - radius);
+    const sourceWidth = Math.min(radius * 2, this.color.canvas.width - sourceX);
+    const sourceHeight = Math.min(radius * 2, this.color.canvas.height - sourceY);
+    if (sourceWidth <= 0 || sourceHeight <= 0) return;
+    this.color.save();
+    this.color.globalAlpha = 0.08 + pressure * 0.12;
+    this.color.drawImage(
+      this.color.canvas,
+      sourceX,
+      sourceY,
+      sourceWidth,
+      sourceHeight,
+      sourceX + dx * 0.16,
+      sourceY + dy * 0.16,
+      sourceWidth,
+      sourceHeight,
+    );
+    this.color.restore();
   }
 }
